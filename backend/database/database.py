@@ -1,8 +1,25 @@
-import sqlite3
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
 
-DB_NAME = "vira.db"
+DATABASE_URL = "sqlite:///./vira.db"
+
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False}
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
+
+Base = declarative_base()
+
 
 def get_db():
-    conn = sqlite3.connect(DB_NAME)
-    conn.row_factory = sqlite3.Row
-    return conn
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
