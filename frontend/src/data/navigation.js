@@ -20,7 +20,7 @@ const navigation = [
     path: "/logs",
   },
   {
-    name: "AI Investigation Engine",
+    name: "Investigation",
     icon: BrainCircuit,
     path: "/investigation",
   },

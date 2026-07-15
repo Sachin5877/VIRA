@@ -12,4 +12,22 @@ body,
 
 body {
   font-family: "Inter", sans-serif;
+  background: var(--background);
+  color: var(--text);
+}
+:root {
+  --background: #020817;
+  --sidebar: #0f172a;
+  --card: #111827;
+  --border: #1e293b;
+
+  --primary: #2563eb;
+  --accent: #38bdf8;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  --text: #f8fafc;
+  --text-secondary: #94a3b8;
 }
