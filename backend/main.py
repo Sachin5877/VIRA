@@ -4,6 +4,7 @@ from api.auth import router as auth_router
 from database.database import SessionLocal
 from database.init_db import initialize_database
 from database.schema import create_tables
+from api.uploads import router as upload_router
 
 app = FastAPI(
     title="VIRA API",
@@ -21,7 +22,7 @@ def startup():
 
 
 app.include_router(auth_router)
-
+app.include_router(upload_router)
 
 @app.get("/")
 def home():
