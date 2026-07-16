@@ -1,7 +1,9 @@
+import RecentAlerts from "../components/dashboard/RecentAlerts";
 import StatCard from "../components/dashboard/StatCard";
 import dashboardStats from "../data/dashboard";
 import Sidebar from "../components/layout/Sidebar";
 import Navbar from "../components/layout/Navbar";
+import InvestigationPanel from "../components/dashboard/InvestigationPanel";
 
 export default function Dashboard() {
   return (
@@ -37,6 +39,17 @@ export default function Dashboard() {
       />
     );
   })}
+</div>
+<div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-12">
+
+  <div className="xl:col-span-8">
+    <InvestigationPanel />
+  </div>
+
+  <div className="xl:col-span-4">
+    <RecentAlerts />
+  </div>
+
 </div>
 
         </main>
