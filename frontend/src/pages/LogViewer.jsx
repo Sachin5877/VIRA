@@ -48,6 +48,13 @@ const failedLogins = filteredLogs.filter(log =>
 const malwareEvents = filteredLogs.filter(log =>
   String(log.event).toLowerCase().includes("malware")
 ).length;
+const getSeverity = (event) => {
+  const e = String(event).toLowerCase();
+
+  if (e.includes("malware")) return "High";
+  if (e.includes("failed")) return "Medium";
+  return "Low";
+};
   return (
     <div className="min-h-screen bg-slate-950 text-white p-8">
       <div className="mb-8">
@@ -106,6 +113,9 @@ const malwareEvents = filteredLogs.filter(log =>
                     {key}
                   </th>
                 ))}
+                <th className="px-4 py-3 text-left border-b border-slate-700">
+  Severity
+</th>
             </tr>
           </thead>
 
@@ -116,10 +126,24 @@ const malwareEvents = filteredLogs.filter(log =>
                 className="border-b border-slate-800 hover:bg-slate-900"
               >
                 {Object.values(row).map((value, i) => (
-                  <td key={i} className="px-4 py-3">
-                    {String(value)}
-                  </td>
-                ))}
+  <td key={i} className="px-4 py-3">
+    {String(value)}
+  </td>
+))}
+
+<td className="px-4 py-3">
+  <span
+    className={`rounded-full px-3 py-1 text-sm font-semibold ${
+      getSeverity(row.event) === "High"
+        ? "bg-red-500/20 text-red-400"
+        : getSeverity(row.event) === "Medium"
+        ? "bg-yellow-500/20 text-yellow-400"
+        : "bg-green-500/20 text-green-400"
+    }`}
+  >
+    {getSeverity(row.event)}
+  </span>
+</td>
               </tr>
             ))}
           </tbody>
