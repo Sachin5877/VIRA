@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload } from "lucide-react";
 import { uploadLog } from "../services/uploadService";
-
+import UploadedLogs from "../components/upload/UploadedLogs";
 export default function UploadLogs() {
   const [message, setMessage] = useState("");
 
@@ -63,6 +63,7 @@ export default function UploadLogs() {
           {message}
         </div>
       )}
+      <UploadedLogs />
     </div>
   );
 }

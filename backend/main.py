@@ -6,6 +6,8 @@ from database.init_db import initialize_database
 from database.schema import create_tables
 from api.uploads import router as upload_router
 from fastapi.middleware.cors import CORSMiddleware
+from api.files import router as files_router
+from api.viewer import router as viewer_router
 app = FastAPI(
     title="VIRA API",
     version="1.0.0"
@@ -32,7 +34,8 @@ def startup():
 
 app.include_router(auth_router)
 app.include_router(upload_router)
-
+app.include_router(files_router)
+app.include_router(viewer_router)
 @app.get("/")
 def home():
     return {
