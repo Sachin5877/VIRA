@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getLogData } from "../services/viewerService";
+import { investigateLog } from "../services/investigationService";
 
 export default function LogViewer() {
     const { filename } = useParams();
@@ -8,6 +9,7 @@ export default function LogViewer() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [investigation, setInvestigation] = useState(false);
+  const [result, setResult] = useState(null);
 
   useEffect(() => {
     loadLogs();
@@ -23,6 +25,15 @@ export default function LogViewer() {
       setLoading(false);
     }
   }
+  async function runInvestigation() {
+  try {
+    const data = await investigateLog();
+    setResult(data);
+    setInvestigation(true);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
   if (loading) {
     return (
@@ -102,7 +113,7 @@ const getSeverity = (event) => {
 
     <div className="mb-8 flex justify-end">
       <button
-        onClick={() => setInvestigation(true)}
+        onClick={runInvestigation}
         className="rounded-xl bg-cyan-600 px-6 py-3 font-semibold text-white transition hover:bg-cyan-500"
       >
         🔍 Investigate with VIRA
@@ -120,9 +131,55 @@ const getSeverity = (event) => {
         </p>
 
         <div className="mt-6 rounded-xl bg-slate-950 p-4">
-          <p className="text-slate-400">
-            Waiting for AI analysis...
-          </p>
+          {result ? (
+  <div className="space-y-4">
+
+    <div>
+      <h3 className="font-semibold text-cyan-400">
+        Threat Summary
+      </h3>
+
+      <p>{result.summary}</p>
+    </div>
+
+    <div>
+      <h3 className="font-semibold text-red-400">
+        Risk Score
+      </h3>
+
+      <p>{result.risk}</p>
+    </div>
+
+    <div>
+      <h3 className="font-semibold text-yellow-400">
+        MITRE ATT&CK
+      </h3>
+
+      <ul className="list-disc pl-6">
+        {result.mitre.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h3 className="font-semibold text-green-400">
+        Recommendations
+      </h3>
+
+      <ul className="list-disc pl-6">
+        {result.recommendation.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+
+  </div>
+) : (
+  <p className="text-slate-400">
+    Waiting for AI analysis...
+  </p>
+)}
         </div>
       </div>
     )}

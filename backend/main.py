@@ -8,6 +8,7 @@ from api.uploads import router as upload_router
 from fastapi.middleware.cors import CORSMiddleware
 from api.files import router as files_router
 from api.viewer import router as viewer_router
+from api.investigate import router as investigate_router
 app = FastAPI(
     title="VIRA API",
     version="1.0.0"
@@ -36,6 +37,7 @@ app.include_router(auth_router)
 app.include_router(upload_router)
 app.include_router(files_router)
 app.include_router(viewer_router)
+app.include_router(investigate_router)
 @app.get("/")
 def home():
     return {
