@@ -6,6 +6,7 @@ import Navbar from "../components/layout/Navbar";
 import InvestigationPanel from "../components/dashboard/InvestigationPanel";
 import ThreatAnalytics from "../components/dashboard/ThreatAnalytics";
 import QuickActions from "../components/dashboard/QuickActions";
+
 export default function Dashboard() {
   return (
     <div className="flex min-h-screen bg-slate-950">
@@ -56,6 +57,9 @@ export default function Dashboard() {
 <div className="mt-8">
   <ThreatAnalytics />
 </div>
+
+
+
 <div className="mt-8">
   <QuickActions />
 </div>
