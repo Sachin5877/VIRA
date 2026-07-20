@@ -1,17 +1,23 @@
 from fastapi import APIRouter
 from services.ai_service import analyze_logs
+import os
 
 router = APIRouter()
 
-@router.post("/investigate")
-async def investigate():
+UPLOAD_FOLDER = "uploads"
 
-    sample_logs = """
-2026-07-16,192.168.1.100,Failed Login
-2026-07-16,10.0.0.5,Malware Detected
-"""
+@router.post("/investigate/{filename}")
+async def investigate(filename: str):
 
-    analysis = analyze_logs(sample_logs)
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+
+    if not os.path.exists(file_path):
+        return {"error": "File not found"}
+
+    with open(file_path, "r", encoding="utf-8") as f:
+        log_text = f.read()
+
+    analysis = analyze_logs(log_text)
 
     return {
         "summary": analysis
