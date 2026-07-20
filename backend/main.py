@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 
 from api.auth import router as auth_router
@@ -9,6 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.files import router as files_router
 from api.viewer import router as viewer_router
 from api.investigate import router as investigate_router
+from fastapi.responses import FileResponse
+from services.pdf_service import generate_report
+from services.ai_service import analyze_logs
+from services.ioc_service import extract_iocs
 app = FastAPI(
     title="VIRA API",
     version="1.0.0"
@@ -46,3 +51,29 @@ def home():
         "version": "1.0.0",
         "message": "Welcome to VIRA API"
     }
+@app.post("/report/{filename}")
+def create_report(filename: str):
+
+    path = os.path.join("uploads", filename)
+
+    with open(path, "r", encoding="utf-8") as f:
+        logs = f.read()
+
+    analysis = analyze_logs(logs)
+
+    pdf = generate_report(filename, analysis)
+
+    return FileResponse(
+        pdf,
+        media_type="application/pdf",
+        filename=os.path.basename(pdf),
+    )
+@app.get("/ioc/{filename}")
+def get_iocs(filename: str):
+
+    path = os.path.join("uploads", filename)
+
+    with open(path, "r", encoding="utf-8") as f:
+        logs = f.read()
+
+    return extract_iocs(logs)
