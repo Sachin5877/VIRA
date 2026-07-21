@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getLogData } from "../services/viewerService";
 import { investigateLog } from "../services/investigationService";
+import { getIOCs } from "../services/iocService";
 
 export default function LogViewer() {
   const { filename } = useParams();
@@ -12,6 +13,7 @@ export default function LogViewer() {
   const [investigation, setInvestigation] = useState(false);
   const [result, setResult] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [ioc, setIoc] = useState(null);
 
   useEffect(() => {
     if (filename) {
@@ -20,15 +22,19 @@ export default function LogViewer() {
   }, [filename]);
 
   async function loadLogs() {
-    try {
-      const data = await getLogData(filename);
-      setLogs(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+  try {
+    const data = await getLogData(filename);
+    setLogs(data);
+
+    const iocData = await getIOCs(filename);
+    setIoc(iocData);
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoading(false);
   }
+}
 
  async function runInvestigation() {
   try {
@@ -126,19 +132,97 @@ export default function LogViewer() {
           </h2>
         </div>
       </div>
-
+      
       <div className="mb-8 flex justify-end">
-        <button
-  onClick={runInvestigation}
-  disabled={aiLoading}
-  className={`rounded-xl px-6 py-3 font-semibold text-white transition ${
-    aiLoading
-      ? "cursor-not-allowed bg-slate-600"
-      : "bg-cyan-600 hover:bg-cyan-500"
-  }`}
->
-  {aiLoading ? "🧠 VIRA is analyzing..." : "🔍 Investigate with VIRA"}
-</button>
+        {ioc && (
+  <div className="mb-8 rounded-2xl border border-slate-700 bg-slate-900 p-6">
+    <h2 className="mb-6 text-2xl font-bold text-cyan-400">
+      Indicators of Compromise (IOC)
+    </h2>
+
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+
+      <div>
+        <h3 className="mb-2 font-semibold text-red-400">
+          🌐 IP Addresses
+        </h3>
+
+        {ioc.ips.length ? (
+          <ul className="list-disc pl-6">
+            {ioc.ips.map((ip, index) => (
+              <li key={index}>{ip}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-slate-400">None</p>
+        )}
+      </div>
+
+      <div>
+        <h3 className="mb-2 font-semibold text-yellow-400">
+          🌍 Domains
+        </h3>
+
+        {ioc.domains.length ? (
+          <ul className="list-disc pl-6">
+            {ioc.domains.map((domain, index) => (
+              <li key={index}>{domain}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-slate-400">None</p>
+        )}
+      </div>
+
+      <div>
+        <h3 className="mb-2 font-semibold text-green-400">
+          🔗 URLs
+        </h3>
+
+        {ioc.urls.length ? (
+          <ul className="list-disc pl-6">
+            {ioc.urls.map((url, index) => (
+              <li key={index}>{url}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-slate-400">None</p>
+        )}
+      </div>
+
+      <div>
+        <h3 className="mb-2 font-semibold text-blue-400">
+          📧 Emails
+        </h3>
+
+        {ioc.emails.length ? (
+          <ul className="list-disc pl-6">
+            {ioc.emails.map((email, index) => (
+              <li key={index}>{email}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-slate-400">None</p>
+        )}
+      </div>
+
+    </div>
+  </div>
+)}
+        
+        <div className="mb-8 flex items-center justify-center">
+  <button
+    onClick={runInvestigation}
+    disabled={aiLoading}
+    className={`rounded-xl px-8 py-4 font-semibold text-white transition ${
+      aiLoading
+        ? "cursor-not-allowed bg-slate-600"
+        : "bg-cyan-600 hover:bg-cyan-500"
+    }`}
+  >
+    {aiLoading ? "🧠 VIRA is analyzing..." : "🔍 Investigate with VIRA"}
+  </button>
+</div>
       </div>
 
       {investigation && (
