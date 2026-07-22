@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getLogData } from "../services/viewerService";
 import { investigateLog } from "../services/investigationService";
 import { getIOCs } from "../services/iocService";
+import { getMitre } from "../services/mitreService";
 
 export default function LogViewer() {
   const { filename } = useParams();
@@ -14,6 +15,7 @@ export default function LogViewer() {
   const [result, setResult] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [ioc, setIoc] = useState(null);
+  const [mitre, setMitre] = useState([]);
 
   useEffect(() => {
     if (filename) {
@@ -43,6 +45,8 @@ export default function LogViewer() {
     const data = await investigateLog(filename);
 
     setResult(data);
+    const mapping = await getMitre(filename);
+setMitre(mapping);
     setInvestigation(true);
   } catch (error) {
     console.error(error);
@@ -253,12 +257,43 @@ export default function LogViewer() {
     <pre className="whitespace-pre-wrap text-slate-300">
       {result.summary}
     </pre>
+
+    {mitre.length > 0 && (
+      <div className="mt-8">
+        <h3 className="mb-4 text-2xl font-bold text-cyan-400">
+          MITRE ATT&CK Mapping
+        </h3>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {mitre.map((item, index) => (
+            <div
+              key={index}
+              className="rounded-xl border border-slate-700 bg-slate-900 p-5"
+            >
+              <p className="text-lg font-bold text-cyan-400">
+                {item.id}
+              </p>
+
+              <p className="mt-2 font-semibold">
+                {item.name}
+              </p>
+
+              <p className="mt-1 text-slate-400">
+                {item.tactic}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
   </div>
 ) : (
   <p className="text-slate-400">
     Waiting for AI analysis...
   </p>
 )}
+
           </div>
         </div>
       )}
