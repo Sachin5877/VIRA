@@ -4,6 +4,7 @@ import { getLogData } from "../services/viewerService";
 import { investigateLog } from "../services/investigationService";
 import { getIOCs } from "../services/iocService";
 import { getMitre } from "../services/mitreService";
+import { getTimeline } from "../services/timelineService";
 
 export default function LogViewer() {
   const { filename } = useParams();
@@ -16,6 +17,7 @@ export default function LogViewer() {
   const [aiLoading, setAiLoading] = useState(false);
   const [ioc, setIoc] = useState(null);
   const [mitre, setMitre] = useState([]);
+  const [timeline, setTimeline] = useState([]);
 
   useEffect(() => {
     if (filename) {
@@ -47,6 +49,8 @@ export default function LogViewer() {
     setResult(data);
     const mapping = await getMitre(filename);
 setMitre(mapping);
+const timelineData = await getTimeline(filename);
+setTimeline(timelineData);
     setInvestigation(true);
   } catch (error) {
     console.error(error);
@@ -286,6 +290,35 @@ setMitre(mapping);
         </div>
       </div>
     )}
+    {timeline.length > 0 && (
+  <div className="mt-8">
+    <h3 className="mb-4 text-2xl font-bold text-cyan-400">
+      Investigation Timeline
+    </h3>
+
+    <div className="space-y-4">
+      {timeline.map((item, index) => (
+        <div
+          key={index}
+          className="rounded-xl border border-slate-700 bg-slate-900 p-5"
+        >
+          <p className="text-cyan-400 font-semibold">
+            {item.time}
+          </p>
+
+          <p className="mt-2 text-lg">
+            {item.event}
+          </p>
+
+          <p className="mt-1 text-slate-400">
+            Source IP: {item.ip}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+    
 
   </div>
 ) : (

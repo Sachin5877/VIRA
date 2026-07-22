@@ -15,6 +15,7 @@ from services.pdf_service import generate_report
 from services.ai_service import analyze_logs
 from services.ioc_service import extract_iocs
 from services.mitre_service import get_mitre_mapping
+from services.timeline_service import get_timeline
 app = FastAPI(
     title="VIRA API",
     version="1.0.0"
@@ -81,3 +82,6 @@ def get_iocs(filename: str):
 @app.get("/mitre/{filename}")
 def mitre(filename: str):
     return get_mitre_mapping(filename)
+@app.get("/timeline/{filename}")
+def timeline(filename: str):
+    return get_timeline(filename)
