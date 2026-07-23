@@ -5,6 +5,8 @@ import { investigateLog } from "../services/investigationService";
 import { getIOCs } from "../services/iocService";
 import { getMitre } from "../services/mitreService";
 import { getTimeline } from "../services/timelineService";
+import ThreatCharts from "../components/dashboard/ThreatCharts";
+
 
 export default function LogViewer() {
   const { filename } = useParams();
@@ -18,6 +20,7 @@ export default function LogViewer() {
   const [ioc, setIoc] = useState(null);
   const [mitre, setMitre] = useState([]);
   const [timeline, setTimeline] = useState([]);
+  
 
   useEffect(() => {
     if (filename) {
@@ -88,12 +91,56 @@ setTimeline(timelineData);
   ).length;
 
   const getSeverity = (event) => {
+    const severityData = [
+  { name: "High", value: malwareEvents },
+  { name: "Medium", value: failedLogins },
+  {
+    name: "Low",
+    value:
+      totalLogs -
+      malwareEvents -
+      failedLogins,
+  },
+];
+
+const eventCounts = {};
+
+filteredLogs.forEach((log) => {
+  const event = log.event || "Unknown";
+
+  eventCounts[event] = (eventCounts[event] || 0) + 1;
+});
+
+const eventData = Object.entries(eventCounts).map(
+  ([name, count]) => ({
+    name,
+    count,
+  })
+);
     const e = String(event).toLowerCase();
 
     if (e.includes("malware")) return "High";
     if (e.includes("failed")) return "Medium";
     return "Low";
   };
+  const severityData = [
+  {
+    name: "High",
+    value: malwareEvents,
+  },
+  {
+    name: "Medium",
+    value: failedLogins,
+  },
+  {
+    name: "Low",
+    value:
+      Math.max(
+        totalLogs - malwareEvents - failedLogins,
+        0
+      ),
+  },
+];
 
   return (
     <div className="min-h-screen bg-slate-950 p-8 text-white">
@@ -330,7 +377,7 @@ setTimeline(timelineData);
           </div>
         </div>
       )}
-
+<ThreatCharts severityData={severityData} />
       <div className="overflow-x-auto rounded-xl border border-slate-700">
         <table className="w-full">
           <thead className="bg-slate-800">
