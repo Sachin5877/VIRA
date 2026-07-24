@@ -3,15 +3,27 @@ import { useDropzone } from "react-dropzone";
 import { Upload } from "lucide-react";
 import { uploadLog } from "../services/uploadService";
 import UploadedLogs from "../components/upload/UploadedLogs";
+import { useNotifications } from "../context/NotificationContext";
+
 export default function UploadLogs() {
   const [message, setMessage] = useState("");
+  const { addNotification } = useNotifications();
 
   const onDrop = async (acceptedFiles) => {
     if (!acceptedFiles.length) return;
 
     try {
       const result = await uploadLog(acceptedFiles[0]);
+
       setMessage(result.message);
+
+      // 🔔 Add Notification
+      addNotification(
+        "Upload Successful",
+        `${acceptedFiles[0].name} uploaded successfully.`,
+        "border-green-500"
+      );
+
     } catch (err) {
       setMessage("Upload failed.");
       console.error(err);
@@ -63,6 +75,7 @@ export default function UploadLogs() {
           {message}
         </div>
       )}
+
       <UploadedLogs />
     </div>
   );

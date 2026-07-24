@@ -16,6 +16,7 @@ from services.ai_service import analyze_logs
 from services.ioc_service import extract_iocs
 from services.mitre_service import get_mitre_mapping
 from services.timeline_service import get_timeline
+from api.chat import router as chat_router
 app = FastAPI(
     title="VIRA API",
     version="1.0.0"
@@ -45,6 +46,7 @@ app.include_router(upload_router)
 app.include_router(files_router)
 app.include_router(viewer_router)
 app.include_router(investigate_router)
+app.include_router(chat_router)
 @app.get("/")
 def home():
     return {

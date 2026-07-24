@@ -6,6 +6,7 @@ import Navbar from "../components/layout/Navbar";
 import InvestigationPanel from "../components/dashboard/InvestigationPanel";
 import ThreatAnalytics from "../components/dashboard/ThreatAnalytics";
 import QuickActions from "../components/dashboard/QuickActions";
+import Notifications from "../components/dashboard/Notifications";
 
 export default function Dashboard() {
   return (
@@ -60,8 +61,12 @@ export default function Dashboard() {
 
 
 
-<div className="mt-8">
+<div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
+
   <QuickActions />
+
+  <Notifications />
+
 </div>
 
         </main>
