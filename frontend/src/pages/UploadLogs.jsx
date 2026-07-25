@@ -18,12 +18,13 @@ export default function UploadLogs() {
       setMessage(result.message);
 
       // 🔔 Add Notification
-      addNotification(
-        "Upload Successful",
-        `${acceptedFiles[0].name} uploaded successfully.`,
-        "border-green-500"
-      );
+      console.log("Notification Triggered");
 
+addNotification(
+  "Upload Successful",
+  `${acceptedFiles[0].name} uploaded successfully.`,
+  "border-green-500"
+);
     } catch (err) {
       setMessage("Upload failed.");
       console.error(err);
