@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getLogData } from "../services/viewerService";
 import { investigateLog } from "../services/investigationService";
 import { getIOCs } from "../services/iocService";
@@ -10,6 +10,7 @@ import ThreatCharts from "../components/dashboard/ThreatCharts";
 
 export default function LogViewer() {
   const { filename } = useParams();
+  const navigate = useNavigate();
 
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,6 +18,7 @@ export default function LogViewer() {
   const [investigation, setInvestigation] = useState(false);
   const [result, setResult] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
   const [ioc, setIoc] = useState(null);
   const [mitre, setMitre] = useState([]);
   const [timeline, setTimeline] = useState([]);
@@ -43,25 +45,46 @@ export default function LogViewer() {
   }
 }
 
- async function runInvestigation() {
+async function runInvestigation() {
   try {
     setAiLoading(true);
+
+    setLoadingStep(1);
+
+    await new Promise((r) => setTimeout(r, 700));
+
+    setLoadingStep(2);
+
+    await new Promise((r) => setTimeout(r, 700));
+
+    setLoadingStep(3);
+
+    await new Promise((r) => setTimeout(r, 700));
+
+    setLoadingStep(4);
+
+    await new Promise((r) => setTimeout(r, 700));
 
     const data = await investigateLog(filename);
 
     setResult(data);
+
     const mapping = await getMitre(filename);
-setMitre(mapping);
-const timelineData = await getTimeline(filename);
-setTimeline(timelineData);
+
+    setMitre(mapping);
+
+    setLoadingStep(5);
+
+    await new Promise((r) => setTimeout(r, 500));
+
     setInvestigation(true);
   } catch (error) {
     console.error(error);
   } finally {
     setAiLoading(false);
+    setLoadingStep(0);
   }
 }
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950 text-xl text-white">
@@ -280,7 +303,7 @@ const eventData = Object.entries(eventCounts).map(
 </div>
       </div>
 
-      {investigation && (
+      {(investigation || aiLoading) && (
         <div className="mb-8 rounded-2xl border border-cyan-500/30 bg-slate-900 p-6">
           <h2 className="text-2xl font-bold text-cyan-400">
             VIRA Investigation
@@ -288,16 +311,57 @@ const eventData = Object.entries(eventCounts).map(
 
           <div className="mt-6 rounded-xl bg-slate-950 p-4">
             {aiLoading ? (
-  <div className="rounded-xl bg-slate-950 p-6 text-center">
-    <div className="text-3xl">🧠</div>
+  <div className="rounded-2xl border border-cyan-500/30 bg-slate-950 p-8">
 
-    <h3 className="mt-4 text-xl font-semibold text-cyan-400">
-      VIRA is analyzing your logs...
-    </h3>
+    <div className="flex items-center gap-4">
+      <div className="h-14 w-14 animate-pulse rounded-full bg-cyan-500/20 flex items-center justify-center text-3xl">
+        🧠
+      </div>
 
-    <p className="mt-2 text-slate-400">
-      Please wait while Llama 3.1 investigates the uploaded log file.
-    </p>
+      <div>
+        <h2 className="text-2xl font-bold text-cyan-400">
+          VIRA AI Investigation
+        </h2>
+
+        <p className="text-slate-400">
+          Performing intelligent security analysis...
+        </p>
+      </div>
+    </div>
+
+    <div className="mt-8 h-3 w-full overflow-hidden rounded-full bg-slate-800">
+      <div
+        className="h-full rounded-full bg-cyan-500 transition-all duration-700"
+        style={{
+          width: `${loadingStep * 20}%`,
+        }}
+      />
+    </div>
+
+    <div className="mt-8 space-y-4">
+
+      <div className={`${loadingStep >= 1 ? "text-cyan-400" : "text-slate-500"}`}>
+        {loadingStep >= 1 ? "✔" : "○"} Parsing uploaded logs...
+      </div>
+
+      <div className={`${loadingStep >= 2 ? "text-cyan-400" : "text-slate-500"}`}>
+        {loadingStep >= 2 ? "✔" : "○"} Detecting Indicators of Compromise...
+      </div>
+
+      <div className={`${loadingStep >= 3 ? "text-cyan-400" : "text-slate-500"}`}>
+        {loadingStep >= 3 ? "✔" : "○"} Mapping MITRE ATT&CK...
+      </div>
+
+      <div className={`${loadingStep >= 4 ? "text-cyan-400" : "text-slate-500"}`}>
+        {loadingStep >= 4 ? "✔" : "○"} Building attack timeline...
+      </div>
+
+      <div className={`${loadingStep >= 5 ? "text-cyan-400" : "text-slate-500"}`}>
+        {loadingStep >= 5 ? "✔" : "○"} Generating AI investigation report...
+      </div>
+
+    </div>
+
   </div>
 ) : result ? (
   <div>
@@ -308,6 +372,31 @@ const eventData = Object.entries(eventCounts).map(
     <pre className="whitespace-pre-wrap text-slate-300">
       {result.summary}
     </pre>
+    <div className="mt-8 flex justify-end">
+  <button
+    onClick={() =>
+      navigate("/report", {
+        state: {
+          report: {
+            file: filename,
+            summary: result.summary,
+            mitre,
+            iocs: [
+              ...(ioc?.ips || []),
+              ...(ioc?.domains || []),
+              ...(ioc?.urls || []),
+              ...(ioc?.emails || []),
+            ],
+            timeline,
+          },
+        },
+      })
+    }
+    className="rounded-xl bg-green-600 px-8 py-3 font-semibold hover:bg-green-500"
+  >
+    📄 Generate Report
+  </button>
+</div>
 
     {mitre.length > 0 && (
       <div className="mt-8">

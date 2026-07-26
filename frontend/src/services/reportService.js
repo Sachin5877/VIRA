@@ -64,13 +64,17 @@ export function generateReport(report) {
   y = doc.lastAutoTable.finalY + 10;
 
   doc.setFontSize(15);
-  doc.text("Investigation Timeline", 14, y);
+doc.text("Investigation Timeline", 14, y);
 
-  autoTable(doc, {
-    startY: y + 5,
-    head: [["Event"]],
-    body: report.timeline.map((t) => [t]),
-  });
+autoTable(doc, {
+  startY: y + 5,
+  head: [["Time", "Event", "Source IP"]],
+  body: report.timeline.map((t) => [
+    t.time,
+    t.event,
+    t.ip,
+  ]),
+});
 
   doc.save("VIRA_Incident_Report.pdf");
 }

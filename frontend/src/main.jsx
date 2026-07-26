@@ -4,11 +4,14 @@ import "./index.css";
 import App from "./App.jsx";
 
 import { NotificationProvider } from "./context/NotificationContext";
+import { DashboardProvider } from "./context/DashboardContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <NotificationProvider>
-      <App />
-    </NotificationProvider>
+  <DashboardProvider>
+    <App />
+  </DashboardProvider>
+</NotificationProvider>
   </StrictMode>
 );

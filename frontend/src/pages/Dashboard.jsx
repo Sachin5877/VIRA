@@ -7,8 +7,10 @@ import InvestigationPanel from "../components/dashboard/InvestigationPanel";
 import ThreatAnalytics from "../components/dashboard/ThreatAnalytics";
 import QuickActions from "../components/dashboard/QuickActions";
 import Notifications from "../components/dashboard/Notifications";
+import { useDashboard } from "../context/DashboardContext";
 
 export default function Dashboard() {
+  const { stats } = useDashboard();
   return (
     <div className="flex min-h-screen bg-slate-950">
 
@@ -30,18 +32,38 @@ export default function Dashboard() {
 
 <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
   {dashboardStats.map((item) => {
-    const Icon = item.icon;
+  const Icon = item.icon;
 
-    return (
-      <StatCard
-        key={item.title}
-        title={item.title}
-        value={item.value}
-        subtitle={item.subtitle}
-        icon={<Icon size={34} />}
-      />
-    );
-  })}
+  let value = item.value;
+
+  if (item.title === "Total Logs")
+    value = stats.totalLogs;
+
+  if (item.title === "Uploaded Files")
+    value = stats.uploadedFiles;
+
+  if (item.title === "Investigations")
+    value = stats.investigations;
+
+  if (item.title === "Reports")
+    value = stats.reports;
+
+  if (item.title === "High Alerts")
+    value = stats.highAlerts;
+
+  if (item.title === "MITRE Techniques")
+    value = stats.mitreTechniques;
+
+  return (
+    <StatCard
+      key={item.title}
+      title={item.title}
+      value={value}
+      subtitle={item.subtitle}
+      icon={<Icon size={34} />}
+    />
+  );
+})}
 </div>
 <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-12">
 

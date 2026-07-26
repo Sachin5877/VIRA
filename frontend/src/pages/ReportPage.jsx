@@ -1,37 +1,19 @@
-import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { generateReport } from "../services/reportService";
 
 export default function ReportPage() {
-  const [report] = useState({
-    file: "sample_security_logs.csv",
+  const { state } = useLocation();
 
-    summary:
-      "Multiple failed logins, brute force attempts, malware activity, suspicious PowerShell execution, and privilege escalation were detected.",
-
-    mitre: [
-      {
-        id: "T1110",
-        name: "Brute Force",
-      },
-      {
-        id: "T1059",
-        name: "Command and Scripting Interpreter",
-      },
-    ],
-
-    iocs: [
-      "45.67.89.120",
-      "malicious-update.xyz",
-      "virus-download.net",
-    ],
-
-    timeline: [
-      "Login Failed",
-      "Brute Force",
-      "Malware Detected",
-      "Privilege Escalation",
-    ],
-  });
+const report = state?.report;
+if (!report) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
+      <h1 className="text-2xl">
+        No report available.
+      </h1>
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen bg-slate-950 p-8 text-white">
@@ -118,13 +100,26 @@ export default function ReportPage() {
           Investigation Timeline
         </h2>
 
-        <ul className="mt-4 list-disc pl-6">
+        <div className="mt-4 space-y-4">
+  {report.timeline.map((item, index) => (
+    <div
+      key={index}
+      className="rounded-lg bg-slate-800 p-4"
+    >
+      <p className="font-semibold text-cyan-400">
+        {item.time}
+      </p>
 
-          {report.timeline.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
+      <p className="mt-2 text-white">
+        {item.event}
+      </p>
 
-        </ul>
+      <p className="mt-1 text-slate-400">
+        Source IP: {item.ip}
+      </p>
+    </div>
+  ))}
+</div>
 
       </div>
 

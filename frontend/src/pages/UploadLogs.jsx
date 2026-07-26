@@ -4,10 +4,12 @@ import { Upload } from "lucide-react";
 import { uploadLog } from "../services/uploadService";
 import UploadedLogs from "../components/upload/UploadedLogs";
 import { useNotifications } from "../context/NotificationContext";
+import { useDashboard } from "../context/DashboardContext";
 
 export default function UploadLogs() {
   const [message, setMessage] = useState("");
   const { addNotification } = useNotifications();
+  const { stats, setStats } = useDashboard();
 
   const onDrop = async (acceptedFiles) => {
     if (!acceptedFiles.length) return;
@@ -16,6 +18,11 @@ export default function UploadLogs() {
       const result = await uploadLog(acceptedFiles[0]);
 
       setMessage(result.message);
+      setStats({
+  ...stats,
+  totalLogs: stats.totalLogs + 1,
+  uploadedFiles: stats.uploadedFiles + 1,
+});
 
       // 🔔 Add Notification
       console.log("Notification Triggered");
