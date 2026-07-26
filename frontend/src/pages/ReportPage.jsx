@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { generateReport } from "../services/reportService";
+import { generateReport } from "../utils/generateReport";
 
 export default function ReportPage() {
   const { state } = useLocation();

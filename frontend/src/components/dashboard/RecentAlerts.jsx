@@ -1,49 +1,49 @@
-import alerts from "../../data/alerts";
 import Card from "../ui/Card";
-
-const severityColors = {
-  Critical: "bg-red-500",
-  High: "bg-orange-500",
-  Medium: "bg-yellow-500",
-  Low: "bg-green-500",
-};
+import { useDashboard } from "../../context/DashboardContext";
 
 export default function RecentAlerts() {
+  const { stats } = useDashboard();
+
   return (
-    <Card className="h-full">
+    <Card>
       <h2 className="text-xl font-semibold text-white">
         Recent Alerts
       </h2>
 
       <div className="mt-6 space-y-4">
-        {alerts.map((alert) => (
-          <div
-            key={alert.id}
-            className="rounded-xl border border-slate-800 bg-slate-950 p-4"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span
-                  className={`h-3 w-3 rounded-full ${severityColors[alert.severity]}`}
-                ></span>
 
-                <div>
-                  <p className="font-medium text-white">
-                    {alert.title}
-                  </p>
+        {stats.recentAlerts.length === 0 ? (
 
-                  <p className="text-sm text-slate-400">
-                    {alert.source}
-                  </p>
-                </div>
-              </div>
-
-              <span className="text-xs text-slate-500">
-                {alert.time}
-              </span>
-            </div>
+          <div className="rounded-xl bg-slate-900 p-4 text-slate-400">
+            No alerts detected.
           </div>
-        ))}
+
+        ) : (
+
+          stats.recentAlerts.map((alert, index) => (
+
+            <div
+              key={index}
+              className="rounded-xl border border-slate-800 bg-slate-900 p-4"
+            >
+              <p className="font-semibold text-red-400">
+                {alert.event}
+              </p>
+
+              <p className="mt-1 text-sm text-slate-300">
+                Severity: {alert.severity}
+              </p>
+
+              <p className="mt-1 text-xs text-slate-500">
+                Source IP: {alert.ip}
+              </p>
+
+            </div>
+
+          ))
+
+        )}
+
       </div>
     </Card>
   );

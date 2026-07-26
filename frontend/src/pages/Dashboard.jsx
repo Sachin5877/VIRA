@@ -1,100 +1,121 @@
+import { useEffect } from "react";
+
 import RecentAlerts from "../components/dashboard/RecentAlerts";
 import StatCard from "../components/dashboard/StatCard";
 import dashboardStats from "../data/dashboard";
-import Sidebar from "../components/layout/Sidebar";
 import Navbar from "../components/layout/Navbar";
 import InvestigationPanel from "../components/dashboard/InvestigationPanel";
 import ThreatAnalytics from "../components/dashboard/ThreatAnalytics";
 import QuickActions from "../components/dashboard/QuickActions";
 import Notifications from "../components/dashboard/Notifications";
+
 import { useDashboard } from "../context/DashboardContext";
+import { getDashboardData } from "../services/dashboardService";
 
 export default function Dashboard() {
-  const { stats } = useDashboard();
-  return (
-    <div className="flex min-h-screen bg-slate-950">
+  const { stats, setStats } = useDashboard();
 
-      <Sidebar />
+  useEffect(() => {
+    async function loadDashboard() {
+      try {
+        const data = await getDashboardData();
 
-      <div className="flex flex-1 flex-col">
+        setStats({
+          totalLogs: data.total_logs,
+          uploadedFiles: data.uploaded_files,
+          investigations: data.active_investigations,
+          reports: data.reports_generated,
+          highAlerts: data.critical_alerts,
+          mitreTechniques: data.mitre_techniques,
+          securityScore: data.security_score,
+          recentAlerts: data.recent_alerts,
+          eventDistribution: data.event_distribution,
+          severityDistribution: data.severity_distribution,
+          summary: data.summary,
+        });
+      } catch (err) {
+        console.error("Dashboard API Error:", err);
+      }
+    }
 
-        <Navbar />
-
-        <main className="flex-1 p-8">
-
-         <h1 className="text-4xl font-bold text-white">
-  Security Overview
-</h1>
-
-<p className="mt-3 text-slate-400">
-  Monitor your organization's current security posture.
-</p>
-
-<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-  {dashboardStats.map((item) => {
-  const Icon = item.icon;
-
-  let value = item.value;
-
-  if (item.title === "Total Logs")
-    value = stats.totalLogs;
-
-  if (item.title === "Uploaded Files")
-    value = stats.uploadedFiles;
-
-  if (item.title === "Investigations")
-    value = stats.investigations;
-
-  if (item.title === "Reports")
-    value = stats.reports;
-
-  if (item.title === "High Alerts")
-    value = stats.highAlerts;
-
-  if (item.title === "MITRE Techniques")
-    value = stats.mitreTechniques;
+    loadDashboard();
+  }, []);
 
   return (
-    <StatCard
-      key={item.title}
-      title={item.title}
-      value={value}
-      subtitle={item.subtitle}
-      icon={<Icon size={34} />}
-    />
-  );
-})}
-</div>
-<div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-12">
+    <>
+      <Navbar />
 
-  <div className="xl:col-span-8">
-    <InvestigationPanel />
-  </div>
+      <main className="flex-1 p-8">
 
-  <div className="xl:col-span-4">
-    <RecentAlerts />
-  </div>
-  
+        <h1 className="text-4xl font-bold text-white">
+          Security Overview
+        </h1>
 
-</div>
-<div className="mt-8">
-  <ThreatAnalytics />
-</div>
+        <p className="mt-3 text-slate-400">
+          Monitor your organization's current security posture.
+        </p>
 
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {dashboardStats.map((item) => {
+            const Icon = item.icon;
 
+            let value = item.value;
 
-<div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
+            if (item.title === "Total Logs")
+              value = stats.totalLogs;
 
-  <QuickActions />
+            if (item.title === "Uploaded Files")
+              value = stats.uploadedFiles;
 
-  <Notifications />
+            if (item.title === "Investigations")
+              value = stats.investigations;
 
-</div>
+            if (item.title === "Reports")
+              value = stats.reports;
 
-        </main>
+            if (item.title === "High Alerts")
+              value = stats.highAlerts;
 
-      </div>
+            if (item.title === "MITRE Techniques")
+              value = stats.mitreTechniques;
 
-    </div>
+            return (
+              <StatCard
+                key={item.title}
+                title={item.title}
+                value={value}
+                subtitle={item.subtitle}
+                icon={<Icon size={34} />}
+              />
+            );
+          })}
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-12">
+
+          <div className="xl:col-span-8">
+            <InvestigationPanel />
+          </div>
+
+          <div className="xl:col-span-4">
+            <RecentAlerts />
+          </div>
+
+        </div>
+
+        <div className="mt-8">
+          <ThreatAnalytics />
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
+
+          <QuickActions />
+
+          <Notifications />
+
+        </div>
+
+      </main>
+    </>
   );
 }

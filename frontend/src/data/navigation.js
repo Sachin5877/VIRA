@@ -1,11 +1,9 @@
 import {
   LayoutDashboard,
+  Upload,
   FolderOpen,
   BrainCircuit,
-  Shield,
   FileText,
-  Clock3,
-  Settings,
 } from "lucide-react";
 
 const navigation = [
@@ -15,34 +13,19 @@ const navigation = [
     path: "/",
   },
   {
-    name: "Log Center",
-    icon: FolderOpen,
-    path: "/logs",
+    name: "Upload Logs",
+    icon: Upload,
+    path: "/upload",
   },
   {
-    name: "Investigation",
+    name: "VIRA Chat",
     icon: BrainCircuit,
-    path: "/investigation",
+    path: "/chat",
   },
   {
-    name: "ATT&CK Mapper",
-    icon: Shield,
-    path: "/attack-mapper",
-  },
-  {
-    name: "Report Studio",
+    name: "Reports",
     icon: FileText,
-    path: "/reports",
-  },
-  {
-    name: "Timeline",
-    icon: Clock3,
-    path: "/timeline",
-  },
-  {
-    name: "Settings",
-    icon: Settings,
-    path: "/settings",
+    path: "/report",
   },
 ];
 

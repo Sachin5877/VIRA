@@ -10,6 +10,11 @@ export function DashboardProvider({ children }) {
     reports: 0,
     highAlerts: 0,
     mitreTechniques: 0,
+    securityScore: 100,
+    recentAlerts: [],
+    summary: "",
+    eventDistribution: [],
+severityDistribution: [],
   });
 
   return (

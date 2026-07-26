@@ -5,11 +5,13 @@ import { uploadLog } from "../services/uploadService";
 import UploadedLogs from "../components/upload/UploadedLogs";
 import { useNotifications } from "../context/NotificationContext";
 import { useDashboard } from "../context/DashboardContext";
+import { useNavigate } from "react-router-dom";
 
 export default function UploadLogs() {
   const [message, setMessage] = useState("");
   const { addNotification } = useNotifications();
   const { stats, setStats } = useDashboard();
+  const navigate = useNavigate();
 
   const onDrop = async (acceptedFiles) => {
     if (!acceptedFiles.length) return;
@@ -79,10 +81,39 @@ addNotification(
       </div>
 
       {message && (
-        <div className="mt-6 rounded-lg bg-green-600/20 p-4 text-green-400">
-          {message}
-        </div>
-      )}
+  <div className="mt-6 rounded-xl bg-green-600/20 p-6">
+
+    <p className="text-green-400 font-semibold">
+      {message}
+    </p>
+
+    <div className="mt-6 flex gap-4">
+
+      <button
+        onClick={() => navigate("/")}
+        className="rounded-lg bg-cyan-600 px-6 py-3 hover:bg-cyan-500"
+      >
+        Dashboard
+      </button>
+
+      <button
+        onClick={() => navigate("/uploaded")}
+        className="rounded-lg bg-blue-600 px-6 py-3 hover:bg-blue-500"
+      >
+        View Logs
+      </button>
+
+      <button
+        onClick={() => navigate("/investigation")}
+        className="rounded-lg bg-purple-600 px-6 py-3 hover:bg-purple-500"
+      >
+        Start Investigation
+      </button>
+
+    </div>
+
+  </div>
+)}
 
       <UploadedLogs />
     </div>

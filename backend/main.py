@@ -1,5 +1,6 @@
 import os
 from fastapi import FastAPI
+from api import reports
 
 from api.auth import router as auth_router
 from database.database import SessionLocal
@@ -17,6 +18,8 @@ from services.ioc_service import extract_iocs
 from services.mitre_service import get_mitre_mapping
 from services.timeline_service import get_timeline
 from api.chat import router as chat_router
+from api.dashboard import router as dashboard_router
+
 app = FastAPI(
     title="VIRA API",
     version="1.0.0"
@@ -47,6 +50,8 @@ app.include_router(files_router)
 app.include_router(viewer_router)
 app.include_router(investigate_router)
 app.include_router(chat_router)
+app.include_router(dashboard_router)
+app.include_router(reports.router)
 @app.get("/")
 def home():
     return {
