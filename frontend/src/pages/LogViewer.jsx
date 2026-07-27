@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getLogData } from "../services/viewerService";
 import { investigateLog } from "../services/investigationService";
 import { getIOCs } from "../services/iocService";
 import { getMitre } from "../services/mitreService";
 import { getTimeline } from "../services/timelineService";
 import ThreatCharts from "../components/dashboard/ThreatCharts";
+import { getLogs } from "../services/logService";
 
 
 export default function LogViewer() {
@@ -23,6 +23,7 @@ export default function LogViewer() {
   const [mitre, setMitre] = useState([]);
   const [timeline, setTimeline] = useState([]);
   
+  
 
   useEffect(() => {
     if (filename) {
@@ -32,7 +33,7 @@ export default function LogViewer() {
 
   async function loadLogs() {
   try {
-    const data = await getLogData(filename);
+    const data = await getLogs(filename);
     setLogs(data);
 
     const iocData = await getIOCs(filename);
