@@ -1,8 +1,20 @@
 import { BrainCircuit, ShieldAlert, CheckCircle2 } from "lucide-react";
-import investigation from "../../data/investigation";
 import Card from "../ui/Card";
+import { useDashboard } from "../../context/DashboardContext";
 
 export default function InvestigationPanel() {
+  const { investigation } = useDashboard();
+
+  if (!investigation) {
+    return (
+      <Card className="h-full">
+        <div className="text-center py-12 text-slate-400">
+          No investigation available.
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="h-full">
       <div className="flex items-center justify-between">
@@ -14,12 +26,14 @@ export default function InvestigationPanel() {
         </div>
 
         <span className="rounded-full bg-red-500/20 px-3 py-1 text-sm font-medium text-red-400">
-          {investigation.status}
+          {investigation.severity}
         </span>
       </div>
 
       <div className="mt-6">
-        <p className="text-sm text-slate-400">Incident Summary</p>
+        <p className="text-sm text-slate-400">
+          Incident Summary
+        </p>
 
         <p className="mt-2 leading-7 text-slate-200">
           {investigation.summary}
@@ -28,19 +42,31 @@ export default function InvestigationPanel() {
 
       <div className="mt-8 grid grid-cols-2 gap-6">
         <div>
-          <p className="text-sm text-slate-400">MITRE ATT&CK</p>
+          <p className="text-sm text-slate-400">
+            MITRE ATT&CK
+          </p>
 
           <div className="mt-2 flex items-center gap-2 text-white">
-            <ShieldAlert className="text-orange-400" size={18} />
-            {investigation.mitre}
+            <ShieldAlert
+              className="text-orange-400"
+              size={18}
+            />
+
+            {investigation.mitre?.map((m) => (
+              <span key={m.id}>
+                {m.id} - {m.name}
+              </span>
+            ))}
           </div>
         </div>
 
         <div>
-          <p className="text-sm text-slate-400">Confidence</p>
+          <p className="text-sm text-slate-400">
+            Confidence
+          </p>
 
           <p className="mt-2 text-2xl font-bold text-green-400">
-            {investigation.confidence}
+            {investigation.confidence}%
           </p>
         </div>
       </div>
@@ -51,7 +77,7 @@ export default function InvestigationPanel() {
         </p>
 
         <div className="mt-4 space-y-3">
-          {investigation.actions.map((action) => (
+          {investigation.recommendations?.map((action) => (
             <div
               key={action}
               className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-950 p-3"

@@ -20,6 +20,7 @@ from services.timeline_service import get_timeline
 from api.chat import router as chat_router
 from api.dashboard import router as dashboard_router
 from api.logs import router as logs_router
+from api import investigation
 
 app = FastAPI(
     title="VIRA API",
@@ -54,6 +55,7 @@ app.include_router(chat_router)
 app.include_router(dashboard_router)
 app.include_router(reports.router)
 app.include_router(logs_router)
+app.include_router(investigation.router)
 @app.get("/")
 def home():
     return {
