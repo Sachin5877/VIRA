@@ -10,5 +10,11 @@
         "file": "sample.csv",
         "summary": "Malware Infection detected with Critical severity based on uploaded logs.",
         "created": "28-07-2026 22:28"
+    },
+    {
+        "id": 3,
+        "file": "sample.csv",
+        "summary": "Malware Infection detected with Critical severity based on uploaded logs.",
+        "created": "30-07-2026 15:41"
     }
 ]
