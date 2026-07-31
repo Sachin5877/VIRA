@@ -6,15 +6,16 @@ export default function Input(props) {
         w-full
         rounded-xl
         border
-        border-slate-700
-        bg-slate-900
+        border-[#334155]
+        bg-[#111827]
         px-4
         py-3
-        text-white
+        text-[#F8FAFC]
         outline-none
         transition-all
         duration-300
-        focus:border-blue-500
+        placeholder:text-[#94A3B8]
+        focus:border-[#14B8A6]
       "
     />
   );

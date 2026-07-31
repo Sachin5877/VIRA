@@ -2,8 +2,6 @@ import Card from "../ui/Card";
 import { useDashboard } from "../../context/DashboardContext";
 
 import {
-  LineChart,
-  Line,
   PieChart,
   Pie,
   Cell,
@@ -17,18 +15,17 @@ import {
 } from "recharts";
 
 const COLORS = [
-  "#ef4444",
-  "#f97316",
-  "#eab308",
-  "#22c55e",
-  "#3b82f6",
+  "#14B8A6",
+  "#10B981",
+  "#F59E0B",
+  "#EF4444",
+  "#6366F1",
 ];
 
 export default function ThreatAnalytics() {
 
   const { stats } = useDashboard();
 
-  // Event Distribution → Bar Chart
   const eventData = Object.entries(
     stats.eventDistribution || {}
   ).map(([event, count]) => ({
@@ -36,7 +33,6 @@ export default function ThreatAnalytics() {
     count,
   }));
 
-  // Severity Distribution → Pie Chart
   const severityData = Object.entries(
     stats.severityDistribution || {}
   ).map(([name, value]) => ({
@@ -45,13 +41,14 @@ export default function ThreatAnalytics() {
   }));
 
   return (
+
     <Card>
 
-      <h2 className="text-2xl font-bold text-white">
+      <h2 className="text-2xl font-bold text-[#F8FAFC]">
         Threat Analytics
       </h2>
 
-      <p className="mt-2 text-slate-400">
+      <p className="mt-2 text-[#94A3B8]">
         Security trends and analytics
       </p>
 
@@ -59,9 +56,9 @@ export default function ThreatAnalytics() {
 
         {/* Event Distribution */}
 
-        <div className="h-80 rounded-xl bg-slate-900 p-4">
+        <div className="h-80 rounded-xl bg-[#111827] border border-[#334155] p-4">
 
-          <h3 className="mb-4 font-semibold text-white">
+          <h3 className="mb-4 font-semibold text-[#F8FAFC]">
             Event Distribution
           </h3>
 
@@ -69,7 +66,7 @@ export default function ThreatAnalytics() {
 
             <BarChart data={eventData}>
 
-              <CartesianGrid stroke="#1E293B" />
+              <CartesianGrid stroke="#334155" />
 
               <XAxis
                 dataKey="event"
@@ -82,7 +79,8 @@ export default function ThreatAnalytics() {
 
               <Bar
                 dataKey="count"
-                fill="#06B6D4"
+                fill="#14B8A6"
+                radius={[6,6,0,0]}
               />
 
             </BarChart>
@@ -91,11 +89,11 @@ export default function ThreatAnalytics() {
 
         </div>
 
-        {/* Severity Distribution */}
+        {/* Severity */}
 
-        <div className="h-80 rounded-xl bg-slate-900 p-4">
+        <div className="h-80 rounded-xl bg-[#111827] border border-[#334155] p-4">
 
-          <h3 className="mb-4 font-semibold text-white">
+          <h3 className="mb-4 font-semibold text-[#F8FAFC]">
             Severity Distribution
           </h3>
 
@@ -110,7 +108,7 @@ export default function ThreatAnalytics() {
                 outerRadius={90}
               >
 
-                {severityData.map((entry, index) => (
+                {severityData.map((entry,index)=>(
 
                   <Cell
                     key={index}
@@ -121,7 +119,7 @@ export default function ThreatAnalytics() {
 
               </Pie>
 
-              <Tooltip />
+              <Tooltip/>
 
             </PieChart>
 
@@ -129,19 +127,19 @@ export default function ThreatAnalytics() {
 
         </div>
 
-        {/* Security Score */}
+        {/* Score */}
 
-        <div className="flex h-80 flex-col items-center justify-center rounded-xl bg-slate-900">
+        <div className="flex h-80 flex-col items-center justify-center rounded-xl border border-[#334155] bg-[#111827]">
 
-          <h3 className="text-xl font-semibold text-white">
+          <h3 className="text-xl font-semibold text-[#F8FAFC]">
             Security Score
           </h3>
 
-          <div className="mt-8 text-7xl font-bold text-cyan-400">
+          <div className="mt-8 text-7xl font-bold text-[#14B8A6]">
             {stats.securityScore}
           </div>
 
-          <p className="mt-4 text-slate-400">
+          <p className="mt-4 text-[#94A3B8]">
             Current Security Rating
           </p>
 
@@ -150,5 +148,7 @@ export default function ThreatAnalytics() {
       </div>
 
     </Card>
+
   );
+
 }

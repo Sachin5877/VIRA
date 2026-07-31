@@ -1,0 +1,23 @@
+:root {
+  --bg: #0B1220;
+  --sidebar: #111827;
+  --card: #1B263B;
+  --border: #334155;
+
+  --primary: #14B8A6;
+  --accent: #10B981;
+
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+
+  --text: #F8FAFC;
+  --text-secondary: #94A3B8;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,sans-serif;
+}

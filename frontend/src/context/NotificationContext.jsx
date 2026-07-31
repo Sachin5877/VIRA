@@ -18,7 +18,7 @@ export function NotificationProvider({ children }) {
   function addNotification(
     title,
     message,
-    color = "border-cyan-500"
+    color = "border-[#14B8A6]"
   ) {
     const item = {
       id: Date.now(),

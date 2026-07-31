@@ -4,14 +4,14 @@ export default function Card({ children, className = "" }) {
       className={`
         rounded-2xl
         border
-        border-slate-800
-        bg-slate-900
+        border-[#334155]
+        bg-[#1B263B]
         p-6
         shadow-lg
         transition-all
         duration-300
-        hover:border-blue-500/40
-        hover:shadow-blue-500/10
+        hover:border-[#14B8A6]
+        hover:shadow-xl
         ${className}
       `}
     >

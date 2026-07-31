@@ -3,24 +3,20 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useDashboard } from "../../context/DashboardContext";
 
 export default function Sidebar() {
-
   const navigate = useNavigate();
-
   const location = useLocation();
-
   const { stats } = useDashboard();
 
   return (
+    <aside className="w-72 h-screen bg-[#111827] border-r border-[#334155] flex flex-col">
 
-    <aside className="w-72 h-screen bg-slate-900 border-r border-slate-800 flex flex-col">
+      <div className="p-6 border-b border-[#334155]">
 
-      <div className="p-6 border-b border-slate-800">
-
-        <h1 className="text-2xl font-bold text-white">
+        <h1 className="text-3xl font-extrabold tracking-wide text-[#14B8A6]">
           VIRA
         </h1>
 
-        <p className="mt-1 text-sm text-slate-400">
+        <p className="mt-2 text-sm text-[#94A3B8]">
           Intelligent Security Investigation Platform
         </p>
 
@@ -54,12 +50,12 @@ export default function Sidebar() {
             <button
               key={item.name}
               onClick={() => navigate(item.path)}
-              className={`w-full mb-2 flex items-center justify-between rounded-xl px-4 py-3 transition-all
+              className={`w-full mb-2 flex items-center justify-between rounded-xl px-4 py-3 transition-all duration-300
 
               ${
                 location.pathname === item.path
-                  ? "bg-cyan-600 text-white"
-                  : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  ? "bg-[#14B8A6] text-white shadow-lg"
+                  : "text-[#CBD5E1] hover:bg-[#1B263B] hover:text-[#14B8A6]"
               }`}
             >
 
@@ -73,7 +69,7 @@ export default function Sidebar() {
 
               {badge !== null && (
 
-                <div className="rounded-full bg-slate-800 px-2 py-1 text-xs text-cyan-400">
+                <div className="rounded-full bg-[#0B1220] px-2 py-1 text-xs font-semibold text-[#14B8A6]">
 
                   {badge}
 
@@ -89,24 +85,18 @@ export default function Sidebar() {
 
       </nav>
 
-      <div className="border-t border-slate-800 p-5">
+      <div className="border-t border-[#334155] p-5">
 
-        <div className="font-semibold text-white">
-
+        <div className="font-semibold text-[#F8FAFC]">
           Admin
-
         </div>
 
-        <div className="text-sm text-slate-400">
-
+        <div className="text-sm text-[#94A3B8]">
           Administrator
-
         </div>
 
       </div>
 
     </aside>
-
   );
-
 }

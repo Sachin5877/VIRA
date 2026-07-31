@@ -6,19 +6,19 @@ import {
 
 export default function Navbar() {
   return (
-    <header className="h-20 border-b border-slate-800 bg-slate-900 px-8 flex items-center justify-between">
+    <header className="h-20 border-b border-[#334155] bg-[#111827] px-8 flex items-center justify-between">
 
       <div className="relative w-96">
 
         <Search
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94A3B8]"
           size={18}
         />
 
         <input
           type="text"
           placeholder="Search investigations..."
-          className="w-full rounded-xl bg-slate-950 border border-slate-700 py-3 pl-11 pr-4 text-white outline-none focus:border-blue-500"
+          className="w-full rounded-xl bg-[#0B1220] border border-[#334155] py-3 pl-11 pr-4 text-[#F8FAFC] outline-none transition-all focus:border-[#14B8A6]"
         />
 
       </div>
@@ -26,7 +26,7 @@ export default function Navbar() {
       <div className="flex items-center gap-6">
 
         <Bell
-          className="text-slate-300 cursor-pointer hover:text-blue-400 transition"
+          className="cursor-pointer text-[#CBD5E1] hover:text-[#14B8A6] transition"
           size={22}
         />
 
@@ -34,16 +34,16 @@ export default function Navbar() {
 
           <UserCircle2
             size={38}
-            className="text-blue-400"
+            className="text-[#14B8A6]"
           />
 
           <div>
 
-            <p className="font-semibold text-white">
+            <p className="font-semibold text-[#F8FAFC]">
               Administrator
             </p>
 
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-[#94A3B8]">
               admin@vira.local
             </p>
 

@@ -12,24 +12,36 @@ import {
   Legend,
 } from "recharts";
 
-const COLORS = ["#ef4444", "#facc15", "#22c55e"];
+const COLORS = [
+  "#14B8A6",
+  "#10B981",
+  "#F59E0B",
+  "#EF4444",
+];
 
 export default function ThreatCharts({
   severityData,
   eventData,
 }) {
+
   return (
+
     <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
 
-      {/* Severity Chart */}
+      {/* Severity */}
 
-      <div className="rounded-2xl border border-slate-700 bg-slate-900 p-6">
-        <h2 className="mb-6 text-2xl font-bold text-cyan-400">
+      <div className="rounded-2xl border border-[#334155] bg-[#1B263B] p-6">
+
+        <h2 className="mb-6 text-2xl font-bold text-[#14B8A6]">
+
           Severity Distribution
+
         </h2>
 
         <ResponsiveContainer width="100%" height={300}>
+
           <PieChart>
+
             <Pie
               data={severityData}
               dataKey="value"
@@ -37,43 +49,69 @@ export default function ThreatCharts({
               outerRadius={100}
               label
             >
-              {severityData.map((entry, index) => (
+
+              {severityData.map((entry,index)=>(
+
                 <Cell
                   key={index}
                   fill={COLORS[index % COLORS.length]}
                 />
+
               ))}
+
             </Pie>
 
-            <Tooltip />
+            <Tooltip/>
+
           </PieChart>
+
         </ResponsiveContainer>
+
       </div>
 
-      {/* Event Chart */}
+      {/* Events */}
 
-      <div className="rounded-2xl border border-slate-700 bg-slate-900 p-6">
-        <h2 className="mb-6 text-2xl font-bold text-cyan-400">
+      <div className="rounded-2xl border border-[#334155] bg-[#1B263B] p-6">
+
+        <h2 className="mb-6 text-2xl font-bold text-[#14B8A6]">
+
           Event Types
+
         </h2>
 
         <ResponsiveContainer width="100%" height={300}>
+
           <BarChart data={eventData}>
-            <CartesianGrid strokeDasharray="3 3" />
 
-            <XAxis dataKey="name" />
+            <CartesianGrid stroke="#334155"/>
 
-            <YAxis />
+            <XAxis
+              dataKey="name"
+              stroke="#94A3B8"
+            />
 
-            <Tooltip />
+            <YAxis
+              stroke="#94A3B8"
+            />
 
-            <Legend />
+            <Tooltip/>
 
-            <Bar dataKey="count" fill="#06b6d4" />
+            <Legend/>
+
+            <Bar
+              dataKey="count"
+              fill="#14B8A6"
+              radius={[6,6,0,0]}
+            />
+
           </BarChart>
+
         </ResponsiveContainer>
+
       </div>
 
     </div>
+
   );
+
 }
