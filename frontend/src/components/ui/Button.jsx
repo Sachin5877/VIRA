@@ -2,22 +2,22 @@ export default function Button({
   children,
   onClick,
   className = "",
+  disabled = false,
+  variant = "primary",
 }) {
+  const baseStyles = "rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed";
+  
+  const variantStyles = variant === "secondary"
+    ? "bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 hover:text-slate-900 shadow-xs"
+    : "bg-blue-600 text-white hover:bg-blue-700 shadow-xs shadow-blue-500/20";
+
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={`
-        rounded-xl
-        bg-[#14B8A6]
-        px-5
-        py-3
-        font-medium
-        text-white
-        transition-all
-        duration-300
-        hover:bg-[#10B981]
-        hover:shadow-lg
-        active:scale-95
+        ${baseStyles}
+        ${variantStyles}
         ${className}
       `}
     >

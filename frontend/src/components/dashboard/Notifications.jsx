@@ -1,56 +1,47 @@
 import { useNotifications } from "../../context/NotificationContext";
+import { BellRing } from "lucide-react";
+import Card from "../ui/Card";
 
 export default function Notifications() {
 
   const { notifications } = useNotifications();
 
   return (
-
-    <div className="rounded-2xl border border-[#334155] bg-[#1B263B] p-6">
-
-      <h2 className="mb-6 text-xl font-bold text-[#F8FAFC]">
-        Notifications
-      </h2>
-
-      {notifications.length === 0 ? (
-
-        <div className="rounded-xl bg-[#111827] p-6 text-center">
-
-          <p className="text-[#94A3B8]">
-            No notifications yet.
-          </p>
-
+    <Card className="h-full flex flex-col">
+      <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div className="flex items-center gap-2">
+          <BellRing size={18} className="text-blue-600" />
+          <h2 className="text-base font-bold text-slate-900">
+            Notifications
+          </h2>
         </div>
+        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+          Activity log
+        </span>
+      </div>
 
-      ) : (
-
-        <div className="space-y-4">
-
-          {notifications.map((item, index) => (
-
+      <div className="mt-4 space-y-2.5 flex-1 overflow-y-auto">
+        {!notifications || notifications.length === 0 ? (
+          <div className="rounded-lg bg-slate-50 border border-slate-200/80 p-6 text-center text-xs text-slate-500">
+            No system notifications yet.
+          </div>
+        ) : (
+          notifications.map((item, index) => (
             <div
               key={index}
-              className={`rounded-xl border-l-4 ${item.color} bg-[#111827] p-4 transition hover:border-[#14B8A6]`}
+              className="rounded-lg border border-slate-200/80 bg-slate-50/50 p-3.5 transition hover:bg-white hover:border-slate-300"
             >
-
-              <p className="font-semibold text-[#F8FAFC]">
+              <p className="font-semibold text-xs text-slate-900">
                 {item.title}
               </p>
 
-              <p className="mt-2 text-sm text-[#CBD5E1]">
+              <p className="mt-1 text-xs text-slate-600">
                 {item.message}
               </p>
-
             </div>
-
-          ))}
-
-        </div>
-
-      )}
-
-    </div>
-
+          ))
+        )}
+      </div>
+    </Card>
   );
-
 }

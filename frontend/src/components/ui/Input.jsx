@@ -2,21 +2,25 @@ export default function Input(props) {
   return (
     <input
       {...props}
-      className="
+      className={`
         w-full
-        rounded-xl
+        rounded-lg
         border
-        border-[#334155]
-        bg-[#111827]
-        px-4
-        py-3
-        text-[#F8FAFC]
+        border-slate-200
+        bg-white
+        px-3.5
+        py-2.5
+        text-sm
+        text-slate-900
         outline-none
         transition-all
-        duration-300
-        placeholder:text-[#94A3B8]
-        focus:border-[#14B8A6]
-      "
+        duration-150
+        placeholder:text-slate-400
+        focus:border-blue-500
+        focus:ring-2
+        focus:ring-blue-100
+        ${props.className || ""}
+      `}
     />
   );
 }
