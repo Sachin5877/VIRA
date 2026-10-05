@@ -34,5 +34,11 @@
         "file": "nothing.csv",
         "summary": "Malware Infection detected with Critical severity. The investigation identified 2 indicator(s) of compromise affecting 1 asset(s). Attack stage: Execution.",
         "created": "04-10-2026 11:59"
+    },
+    {
+        "id": 7,
+        "file": "nothing.csv",
+        "summary": "Malware Infection detected with Critical severity. The investigation identified 2 indicator(s) of compromise affecting 1 asset(s). Attack stage: Execution.",
+        "created": "05-10-2026 13:44"
     }
 ]
